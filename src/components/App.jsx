@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import useLocalStorage from 'hooks';
 import { nanoid } from 'nanoid';
 import ContactForm from './ContactForm';
 import Filter from './Filter';
@@ -9,18 +10,7 @@ const LS_CONTACTS_KEY = 'contacts';
 
 export const App = () => {
   const [filter, setFilter] = useState('');
-  const [contacts, setContacts] = useState(() => {
-    const contacts = localStorage.getItem(LS_CONTACTS_KEY);
-    try {
-      return JSON.parse(contacts) ?? [];
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem(LS_CONTACTS_KEY, JSON.stringify(contacts));
-  }, [contacts]);
+  const [contacts, setContacts] = useLocalStorage(LS_CONTACTS_KEY, []);
 
   const checkDuplicates = name => {
     const allNames = contacts.map(contact => contact.name);
